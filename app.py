@@ -41,7 +41,9 @@ def firing_alert(request):
     for alert in request.json['alerts']:
         msg = "Alertmanager: " + icon + "\nStatus: " + status + "\nSeverity: " + alert['labels']['severity'] + "\nTime: " + time + "\nMessage: " + alert['annotations']['message'] 
         msg = {'message': msg}
-        logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+        if os.environ['debug'] == "true":
+          print(str(msg))
+          logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
         response = requests.post(LINE_NOTIFY_URL, headers=header, data=msg)
 
 
@@ -59,8 +61,9 @@ def webhook():
     """
     Firing message to Line notify API when it's triggered.
     """
-    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
-    logging.debug(str(request))
+    if os.environ['debug'] == "true":
+      logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+      logging.debug(str(request.json))
     if request.method == 'GET':
         return jsonify({'status':'success'}), 200
     if request.method == 'POST':
@@ -79,6 +82,9 @@ def metrics():
     """
 
 if __name__ == "__main__":
-      app.run(host='0.0.0.0',debug=True)
+      if os.environ['debug'] == "true":
+        app.run(host='0.0.0.0',debug=True)
+      else:
+         app.run(host='0.0.0.0')
   
 
