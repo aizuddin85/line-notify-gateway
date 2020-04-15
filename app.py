@@ -15,6 +15,11 @@ LINE_NOTIFY_URL = 'https://notify-api.line.me/api/notify'
 app = Flask(__name__)
 
 
+if os.environ['debug'] == "true":
+  debug = "on"
+else:
+  debug = "off"
+
 def reformat_datetime(datetime):
     """
     Reformat of datetime to humand readable.
@@ -41,7 +46,7 @@ def firing_alert(request):
     for alert in request.json['alerts']:
         msg = "Alertmanager: " + icon + "\nStatus: " + status + "\nSeverity: " + alert['labels']['severity'] + "\nTime: " + time + "\nMessage: " + alert['annotations']['message'] 
         msg = {'message': msg}
-        if os.environ['debug'] == "true":
+        if debug == "on":
           print("Payload: " + str(msg))
         response = requests.post(LINE_NOTIFY_URL, headers=header, data=msg)
 
@@ -60,7 +65,7 @@ def webhook():
     """
     Firing message to Line notify API when it's triggered.
     """
-    if os.environ['debug'] == "true":
+    if debug == "on":
       logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
       logging.debug(str(request.json))
     if request.method == 'GET':
@@ -81,7 +86,7 @@ def metrics():
     """
 
 if __name__ == "__main__":
-      if os.environ['debug'] == "true":
+      if debug  == "on":
         app.run(host='0.0.0.0',debug=True)
       else:
          app.run(host='0.0.0.0')
