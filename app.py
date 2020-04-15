@@ -15,10 +15,11 @@ LINE_NOTIFY_URL = 'https://notify-api.line.me/api/notify'
 app = Flask(__name__)
 
 
-if os.environ['debug'] == "true":
+if "debug" in os.environ: 
   debug = "on"
 else:
   debug = "off"
+
 
 def reformat_datetime(datetime):
     """
