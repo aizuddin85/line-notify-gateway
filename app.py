@@ -42,8 +42,7 @@ def firing_alert(request):
         msg = "Alertmanager: " + icon + "\nStatus: " + status + "\nSeverity: " + alert['labels']['severity'] + "\nTime: " + time + "\nMessage: " + alert['annotations']['message'] 
         msg = {'message': msg}
         if os.environ['debug'] == "true":
-          print(str(msg))
-          logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+          print("Payload: " + str(msg))
         response = requests.post(LINE_NOTIFY_URL, headers=header, data=msg)
 
 
