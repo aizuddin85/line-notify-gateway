@@ -40,7 +40,7 @@ def firing_alert(request):
         time = str(datetime.now().date()) + ' ' + str(datetime.now().time().strftime('%H:%M:%S'))
     header = {'Authorization':request.headers['AUTHORIZATION']}
     for alert in request.json['alerts']:
-        msg = "Alertmanager: " + icon + "\Alert name: " +  alert['labels']['alertname'] + "\nStatus: " + status + "\nSeverity: " + alert['labels']['severity'] + "\nTime: " + time + "\nMessage: " + alert['annotations']['message'] 
+        msg = "Alertmanager: " + icon + "\nAlert name: " +  alert['labels']['alertname'] + "\nStatus: " + status + "\nSeverity: " + alert['labels']['severity'] + "\nTime: " + time + "\nMessage: " + alert['annotations']['message'] 
         msg = {'message': msg}
         if debug == "on":
           print("Payload: " + str(msg))
