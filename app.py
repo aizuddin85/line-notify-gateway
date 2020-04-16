@@ -33,16 +33,14 @@ def firing_alert(request):
     if request.json['status'] == 'firing':
         icon = "⛔⛔⛔"
         status = "Firing"
-        # UTC timezone as per SRE best practise and openshift default TZ
-        time = reformat_datetime(request.json['alerts'][0]['startsAt'] + ' UTC')
+        time = reformat_datetime(request.json['alerts'][0]['startsAt'])
     else:
         icon = "🔷🔷🔷"
         status = "Resolved"
-        # UTC timezone as per SRE best practise and openshift default TZ
-        time = str(datetime.now().date()) + ' ' + str(datetime.now().time().strftime('%H:%M:%S') + ' UTC')
+        time = str(datetime.now().date()) + ' ' + str(datetime.now().time().strftime('%H:%M:%S'))
     header = {'Authorization':request.headers['AUTHORIZATION']}
     for alert in request.json['alerts']:
-        msg = "Alertmanager: " + icon + "\nAlert name: " +  alert['labels']['alertname'] + "\nStatus: " + status + "\nSeverity: " + alert['labels']['severity'] + "\nTime: " + time + "\nMessage: " + alert['annotations']['message'] 
+        msg = "Alertmanager: " + icon + "\nAlert name: " +  alert['labels']['alertname'] + "\nStatus: " + status + "\nSeverity: " + alert['labels']['severity'] + "\nTime(UTC): " + time + "\nMessage: " + alert['annotations']['message'] 
         msg = {'message': msg}
         if debug == "on":
           print("Payload: " + str(msg))
