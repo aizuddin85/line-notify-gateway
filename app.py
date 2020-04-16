@@ -9,8 +9,6 @@ import requests
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify
 
-import manage_logs
-
 LINE_NOTIFY_URL = 'https://notify-api.line.me/api/notify'
 app = Flask(__name__)
 
@@ -36,11 +34,11 @@ def firing_alert(request):
     Firing alert to line notification with message payload.
     """
     if request.json['status'] == 'firing':
-        icon = "⛔⛔⛔ 😡 ⛔⛔⛔"
+        icon = "⛔⛔⛔"
         status = "Firing"
         time = reformat_datetime(request.json['alerts'][0]['startsAt'])
     else:
-        icon = "🔷🔷🔷 😎 🔷🔷🔷"
+        icon = "🔷🔷🔷"
         status = "Resolved"
         time = str(datetime.now().date()) + ' ' + str(datetime.now().time().strftime('%H:%M:%S'))
     header = {'Authorization':request.headers['AUTHORIZATION']}

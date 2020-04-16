@@ -1,13 +1,11 @@
 # Line Notification Gateway #
 
-Line Notification Gateway for Alertmanager (Promtheus).
+Line Notification Gateway for Alertmanager OpenShift (Dockerfile build).
 
 ## Installation ##
 
-```bash
-git clone https://github.com/be99inner/line-notify-gateway.git
-cd line-notify-gateway
-docker-compose up -d
+```
+# oc new-app https://github.com/aizuddin85/line-notify-gateway.git#master
 ```
 
 ## Usage ##
