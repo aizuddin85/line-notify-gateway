@@ -12,12 +12,10 @@ from flask import Flask, render_template, request, jsonify
 LINE_NOTIFY_URL = 'https://notify-api.line.me/api/notify'
 app = Flask(__name__)
 
-
 if "debug" in os.environ: 
   debug = "on"
 else:
   debug = "off"
-
 
 def reformat_datetime(datetime):
     """
@@ -27,7 +25,6 @@ def reformat_datetime(datetime):
     date = datetime[0]
     time = datetime[1].split('.')[0]
     return date + " " + time
-
 
 def firing_alert(request):
     """
@@ -43,12 +40,11 @@ def firing_alert(request):
         time = str(datetime.now().date()) + ' ' + str(datetime.now().time().strftime('%H:%M:%S'))
     header = {'Authorization':request.headers['AUTHORIZATION']}
     for alert in request.json['alerts']:
-        msg = "Alertmanager: " + icon + "\nStatus: " + status + "\nSeverity: " + alert['labels']['severity'] + "\nTime: " + time + "\nMessage: " + alert['annotations']['message'] 
+        msg = "Alertmanager: " + icon + "\Alert name: " +  alert['labels']['alertname'] + "\nStatus: " + status + "\nSeverity: " + alert['labels']['severity'] + "\nTime: " + time + "\nMessage: " + alert['annotations']['message'] 
         msg = {'message': msg}
         if debug == "on":
           print("Payload: " + str(msg))
         response = requests.post(LINE_NOTIFY_URL, headers=header, data=msg)
-
 
 @app.route('/')
 def index():
@@ -56,8 +52,7 @@ def index():
     Show summary information on web browser.
     """
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
-    return render_template('index.html', name='index')
-
+    return jsonify({'status':'success'}), 200
 
 @app.route('/webhook', methods=['GET', 'POST'])
 def webhook():
@@ -76,7 +71,6 @@ def webhook():
         except Exception as err:
             raise err
             return jsonify({'status':'bad request'}), 400
-
 
 @app.route('/metrics')
 def metrics():
