@@ -33,11 +33,13 @@ def firing_alert(request):
     if request.json['status'] == 'firing':
         icon = "⛔⛔⛔"
         status = "Firing"
-        time = reformat_datetime(request.json['alerts'][0]['startsAt'])
+        # UTC timezone as per SRE best practise and openshift default TZ
+        time = reformat_datetime(request.json['alerts'][0]['startsAt'] + ' UTC')
     else:
         icon = "🔷🔷🔷"
         status = "Resolved"
-        time = str(datetime.now().date()) + ' ' + str(datetime.now().time().strftime('%H:%M:%S'))
+        # UTC timezone as per SRE best practise and openshift default TZ
+        time = str(datetime.now().date()) + ' ' + str(datetime.now().time().strftime('%H:%M:%S') + ' UTC')
     header = {'Authorization':request.headers['AUTHORIZATION']}
     for alert in request.json['alerts']:
         msg = "Alertmanager: " + icon + "\nAlert name: " +  alert['labels']['alertname'] + "\nStatus: " + status + "\nSeverity: " + alert['labels']['severity'] + "\nTime: " + time + "\nMessage: " + alert['annotations']['message'] 
