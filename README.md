@@ -25,7 +25,7 @@ Set receiver of generic webhook from Alertmanager.
 receivers:
   - name: 'line'
     webhook_configs:
-      - url: 'http://webhook:5000/webhook'
+      - url: 'http://webhook_service_name:5000/webhook'
         http_config:
           bearer_token: '« YOUR_LINE_API_TOKEN »'
 ```
